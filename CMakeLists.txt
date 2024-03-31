@@ -10,6 +10,9 @@ file(STRINGS src/game/version.h VERSION_LINE
   REGEX "^#define GAME_RELEASE_VERSION "
 )
 
+# Установка флага /FORCE:MULTIPLE для всех целей (exe, dll, etc.)
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /FORCE:MULTIPLE")
+
 if(VERSION_LINE MATCHES "\"([0-9]+)\\.([0-9]+)\\.([0-9]+)\"")
   set(VERSION_MAJOR ${CMAKE_MATCH_1})
   set(VERSION_MINOR ${CMAKE_MATCH_2})
@@ -3004,8 +3007,7 @@ set(CPACK_ARCHIVE_PORTABLE_FILE_NAME ${CPACK_PACKAGE_FILE_NAME})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-src)
 set(CPACK_SOURCE_FILES
   CMakeLists.txt
-  README.md
-  cmake/
+        cmake/
   data/
   datasrc/
   ddnet-libs/
