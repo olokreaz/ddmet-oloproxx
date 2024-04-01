@@ -107,7 +107,8 @@ void CGameClient::OnConsoleInit()
 	m_NamePlates.SetPlayers(&m_Players);
 
 	// make a list of all the systems, make sure to add them in the correct render order
-	m_vpAll.insert(m_vpAll.end(), {&m_Skins,
+	m_vpAll.insert(m_vpAll.end(), {
+					      &m_Skins,
 					      &m_CountryFlags,
 					      &m_MapImages,
 					      &m_Effects, // doesn't render anything, just updates effects
@@ -147,7 +148,11 @@ void CGameClient::OnConsoleInit()
 					      &m_Tooltips,
 					      &CMenus::m_Binder,
 					      &m_GameConsole,
-					      &m_MenuBackground});
+					      &m_MenuBackground,
+					      /*/ ox components /*/
+					      &m_OxChat,
+					      &m_OxDummyControls,
+				      });
 
 	// build the input stack
 	m_vpInput.insert(m_vpInput.end(), {&CMenus::m_Binder, // this will take over all input when we want to bind a key
@@ -407,12 +412,6 @@ void CGameClient::OnUpdate()
 
 void CGameClient::OnDummySwap()
 {
-	if(g_Config.m_ClDummyResetOnSwitch)
-	{
-		int PlayerOrDummy = (g_Config.m_ClDummyResetOnSwitch == 2) ? g_Config.m_ClDummy : (!g_Config.m_ClDummy);
-		m_Controls.ResetInput(PlayerOrDummy);
-		m_Controls.m_aInputData[PlayerOrDummy].m_Hook = 0;
-	}
 	int tmp = m_DummyInput.m_Fire;
 	m_DummyInput = m_Controls.m_aInputData[!g_Config.m_ClDummy];
 	m_Controls.m_aInputData[g_Config.m_ClDummy].m_Fire = tmp;
@@ -421,52 +420,18 @@ void CGameClient::OnDummySwap()
 
 int CGameClient::OnSnapInput(int *pData, bool Dummy, bool Force)
 {
+	int x = 0;
 	if(!Dummy)
-	{
-		return m_Controls.SnapInput(pData);
-	}
-
-	if(!g_Config.m_ClDummyHammer)
-	{
-		if(m_DummyFire != 0)
-		{
-			m_DummyInput.m_Fire = (m_HammerInput.m_Fire + 1) & ~1;
-			m_DummyFire = 0;
-		}
-
-		if(!Force && (!m_DummyInput.m_Direction && !m_DummyInput.m_Jump && !m_DummyInput.m_Hook))
-		{
-			return 0;
-		}
-
-		mem_copy(pData, &m_DummyInput, sizeof(m_DummyInput));
-		return sizeof(m_DummyInput);
-	}
+		x = m_Controls.CurrentTeeSnapInput(pData);
 	else
-	{
-		if(m_DummyFire % 25 != 0)
-		{
-			m_DummyFire++;
-			return 0;
-		}
-		m_DummyFire++;
+		x = m_Controls.DummySnapInput(pData, Force);
 
-		m_HammerInput.m_Fire = (m_HammerInput.m_Fire + 1) | 1;
-		m_HammerInput.m_WantedWeapon = WEAPON_HAMMER + 1;
-		if(!g_Config.m_ClDummyRestoreWeapon)
-		{
-			m_DummyInput.m_WantedWeapon = WEAPON_HAMMER + 1;
-		}
+	auto *tee = (CNetObj_PlayerInput *)pData;
 
-		vec2 MainPos = m_LocalCharacterPos;
-		vec2 DummyPos = m_aClients[m_aLocalIds[!g_Config.m_ClDummy]].m_Predicted.m_Pos;
-		vec2 Dir = MainPos - DummyPos;
-		m_HammerInput.m_TargetX = (int)(Dir.x);
-		m_HammerInput.m_TargetY = (int)(Dir.y);
+	// if(Dummy)
+	//	dbg_msg("ox contorls", "Dummy: %d, Fire: %d, Hook: %d, Direction: %d, Jump: %d", Dummy, tee->m_Fire, tee->m_Hook, tee->m_Direction, tee->m_Jump);
 
-		mem_copy(pData, &m_HammerInput, sizeof(m_HammerInput));
-		return sizeof(m_HammerInput);
-	}
+	return x;
 }
 
 void CGameClient::OnConnected()
@@ -936,7 +901,8 @@ void CGameClient::OnMessage(int MsgId, CUnpacker *pUnpacker, int Conn, bool Dumm
 				if(CCharacter *pChar = m_GameWorld.GetCharacterById(i))
 				{
 					pChar->ResetPrediction();
-					vStrongWeakSorted.emplace_back(i, pMsg->m_First == i ? MAX_CLIENTS : pChar ? pChar->GetStrongWeakId() : 0);
+					vStrongWeakSorted.emplace_back(i, pMsg->m_First == i ? MAX_CLIENTS : pChar ? pChar->GetStrongWeakId() :
+														     0);
 				}
 				m_GameWorld.ReleaseHooked(i);
 			}

@@ -15,15 +15,17 @@
 
 #include "controls.h"
 
+#include "ox_dummy_controls.h"
+
 CControls::CControls()
 {
 	mem_zero(&m_aLastData, sizeof(m_aLastData));
-	m_LastDummy = 0;
-	m_OtherFire = 0;
-
+	m_LastDummy = m_OtherFire = 0;
 	mem_zero(m_aMousePos, sizeof(m_aMousePos));
 	mem_zero(m_aMousePosOnAction, sizeof(m_aMousePosOnAction));
 	mem_zero(m_aTargetPos, sizeof(m_aTargetPos));
+
+	mem_zero(&m_DummyEmpty, sizeof(m_DummyEmpty));
 }
 
 void CControls::OnReset()
@@ -39,8 +41,8 @@ void CControls::OnReset()
 void CControls::ResetInput(int Dummy)
 {
 	m_aLastData[Dummy].m_Direction = 0;
-	//m_aLastData[Dummy].m_Hook = 0;
-	// simulate releasing the fire button
+	// m_aLastData[Dummy].m_Hook = 0;
+	//  simulate releasing the fire button
 	if((m_aLastData[Dummy].m_Fire & 1) != 0)
 		m_aLastData[Dummy].m_Fire++;
 	m_aLastData[Dummy].m_Fire &= INPUT_STATE_MASK;
@@ -53,7 +55,7 @@ void CControls::ResetInput(int Dummy)
 
 void CControls::OnRelease()
 {
-	//OnReset();
+	// OnReset();
 }
 
 void CControls::OnPlayerDeath()
@@ -198,7 +200,7 @@ void CControls::OnMessage(int Msg, void *pRawMsg)
 	}
 }
 
-int CControls::SnapInput(int *pData)
+int CControls::CurrentTeeSnapInput(int *pData)
 {
 	static int64_t LastSendTime = 0;
 	bool Send = false;
@@ -273,11 +275,14 @@ int CControls::SnapInput(int *pData)
 			m_aInputData[g_Config.m_ClDummy].m_TargetY *= m_pClient->m_Camera.m_Zoom;
 		}
 
+		auto *pDummyInput = &m_pClient->m_DummyInput;
+		// pDummyInput->m_Jump = g_Config.m_ClDummyJump;
+
 		// dummy copy moves
 		if(g_Config.m_ClDummyCopyMoves)
 		{
-			CNetObj_PlayerInput *pDummyInput = &m_pClient->m_DummyInput;
 			pDummyInput->m_Direction = m_aInputData[g_Config.m_ClDummy].m_Direction;
+			pDummyInput->m_Fire = m_aInputData[g_Config.m_ClDummy].m_Fire;
 			pDummyInput->m_Hook = m_aInputData[g_Config.m_ClDummy].m_Hook;
 			pDummyInput->m_Jump = m_aInputData[g_Config.m_ClDummy].m_Jump;
 			pDummyInput->m_PlayerFlags = m_aInputData[g_Config.m_ClDummy].m_PlayerFlags;
@@ -285,42 +290,26 @@ int CControls::SnapInput(int *pData)
 			pDummyInput->m_TargetY = m_aInputData[g_Config.m_ClDummy].m_TargetY;
 			pDummyInput->m_WantedWeapon = m_aInputData[g_Config.m_ClDummy].m_WantedWeapon;
 
-			if(!g_Config.m_ClDummyControl)
-				pDummyInput->m_Fire += m_aInputData[g_Config.m_ClDummy].m_Fire - m_aLastData[g_Config.m_ClDummy].m_Fire;
-
-			pDummyInput->m_NextWeapon += m_aInputData[g_Config.m_ClDummy].m_NextWeapon - m_aLastData[g_Config.m_ClDummy].m_NextWeapon;
-			pDummyInput->m_PrevWeapon += m_aInputData[g_Config.m_ClDummy].m_PrevWeapon - m_aLastData[g_Config.m_ClDummy].m_PrevWeapon;
+			pDummyInput->m_NextWeapon = m_aInputData[g_Config.m_ClDummy].m_NextWeapon;
+			pDummyInput->m_PrevWeapon = m_aInputData[g_Config.m_ClDummy].m_PrevWeapon;
 
 			m_aInputData[!g_Config.m_ClDummy] = *pDummyInput;
 		}
 
-		if(g_Config.m_ClDummyControl)
-		{
-			CNetObj_PlayerInput *pDummyInput = &m_pClient->m_DummyInput;
-			pDummyInput->m_Jump = g_Config.m_ClDummyJump;
-
-			if(g_Config.m_ClDummyFire)
-				pDummyInput->m_Fire = g_Config.m_ClDummyFire;
-			else if((pDummyInput->m_Fire & 1) != 0)
-				pDummyInput->m_Fire++;
-
-			pDummyInput->m_Hook = g_Config.m_ClDummyHook;
-		}
-
 		// stress testing
 #ifdef CONF_DEBUG
-		if(g_Config.m_DbgStress)
+		if(g_Config.m_DbgStress | g_Config.m_OxFun)
 		{
 			float t = Client()->LocalTime();
-			mem_zero(&m_aInputData[g_Config.m_ClDummy], sizeof(m_aInputData[0]));
+			mem_zero(&m_aInputData[!g_Config.m_ClDummy], sizeof(m_aInputData[0]));
 
-			m_aInputData[g_Config.m_ClDummy].m_Direction = ((int)t / 2) & 1;
-			m_aInputData[g_Config.m_ClDummy].m_Jump = ((int)t);
-			m_aInputData[g_Config.m_ClDummy].m_Fire = ((int)(t * 10));
-			m_aInputData[g_Config.m_ClDummy].m_Hook = ((int)(t * 2)) & 1;
-			m_aInputData[g_Config.m_ClDummy].m_WantedWeapon = ((int)t) % NUM_WEAPONS;
-			m_aInputData[g_Config.m_ClDummy].m_TargetX = (int)(std::sin(t * 3) * 100.0f);
-			m_aInputData[g_Config.m_ClDummy].m_TargetY = (int)(std::cos(t * 3) * 100.0f);
+			m_aInputData[!g_Config.m_ClDummy].m_Direction = ((int)t / 2) & 1;
+			m_aInputData[!g_Config.m_ClDummy].m_Jump = ((int)t);
+			m_aInputData[!g_Config.m_ClDummy].m_Fire = ((int)(t * 10));
+			m_aInputData[!g_Config.m_ClDummy].m_Hook = ((int)(t * 2)) & 1;
+			m_aInputData[!g_Config.m_ClDummy].m_WantedWeapon = ((int)t) % NUM_WEAPONS;
+			m_aInputData[!g_Config.m_ClDummy].m_TargetX = (int)(std::sin(t) * 100.0f);
+			m_aInputData[!g_Config.m_ClDummy].m_TargetY = (int)(std::cos(t) * 100.0f);
 		}
 #endif
 		// check if we need to send input
@@ -356,6 +345,27 @@ int CControls::SnapInput(int *pData)
 	LastSendTime = time_get();
 	mem_copy(pData, &m_aInputData[g_Config.m_ClDummy], sizeof(m_aInputData[0]));
 	return sizeof(m_aInputData[0]);
+}
+
+int CControls::DummySnapInput(int *pData, bool Force)
+{
+	if(!m_pClient->m_OxDummyControls.TakeDummy())
+	{
+		m_pClient->m_DummyInput.m_Fire = (m_DummyEmpty.m_Fire + 1) & ~1;
+
+		if(!Force && (!m_pClient->m_DummyInput.m_Direction && !m_pClient->m_DummyInput.m_Jump && !m_pClient->m_DummyInput.m_Hook && !m_pClient->m_DummyInput.m_Fire))
+			return 0;
+
+		mem_copy(pData, &m_pClient->m_DummyInput, sizeof(m_pClient->m_DummyInput));
+		return sizeof(m_pClient->m_DummyInput);
+	}
+	else
+	{
+		m_pClient->m_OxDummyControls.update(&m_DummyEmpty);
+
+		mem_copy(pData, &m_DummyEmpty, sizeof(m_DummyEmpty));
+		return sizeof(m_DummyEmpty);
+	}
 }
 
 void CControls::OnRender()

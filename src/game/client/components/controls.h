@@ -14,6 +14,8 @@ class CControls : public CComponent
 {
 	float GetMaxMouseDistance() const;
 
+	CNetObj_PlayerInput m_DummyEmpty;
+
 public:
 	vec2 m_aMousePos[NUM_DUMMIES];
 	vec2 m_aMousePosOnAction[NUM_DUMMIES];
@@ -42,7 +44,10 @@ public:
 	virtual void OnConsoleInit() override;
 	virtual void OnPlayerDeath();
 
-	int SnapInput(int *pData);
+	int CurrentTeeSnapInput(int *pData);
+
+	int DummySnapInput(int *pData, bool Force);
+
 	void ClampMousePos();
 	void ResetInput(int Dummy);
 };

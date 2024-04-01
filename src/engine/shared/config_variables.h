@@ -4,12 +4,26 @@
 // This file can be included several times.
 
 #ifndef MACRO_CONFIG_INT
-#error "The config macros must be defined"
+#warning "The config macros must be defined"
 #define MACRO_CONFIG_INT(Name, ScriptName, Def, Min, Max, Save, Desc) ;
 #define MACRO_CONFIG_COL(Name, ScriptName, Def, Save, Desc) ;
 #define MACRO_CONFIG_STR(Name, ScriptName, Len, Def, Save, Desc) ;
 #endif
 // oloproxx
+
+MACRO_CONFIG_INT(OxFun, ox_fun, 0, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Fun Dummy")
+
+// main menu
+MACRO_CONFIG_INT(OxWelcomePage, ox_welcome_page, 1, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Show welcome page")
+
+// gameplay
+MACRO_CONFIG_INT(OxDummyAutoAimHook, ox_dummy_auto_aim_hook, 0, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Automatically aim the hook at the closest ur tee")
+MACRO_CONFIG_INT(OxDummyFly, ox_dummy_fly, 0, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Enable dummy fly")
+
+// KOG
+MACRO_CONFIG_INT(OxSendBackMsg, ox_send_back_msg, 1, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Send back message to the ur mates")
+MACRO_CONFIG_INT(OxSendBackInTeam, ox_send_back_in_team, 1, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Send back message only to the team")
+MACRO_CONFIG_STR(OxBackMsg, ox_back_msg, 64, "I'm back!", CFGFLAG_CLIENT | CFGFLAG_SAVE, "Back message to send to the ur mates")
 
 // client
 MACRO_CONFIG_INT(ClPredict, cl_predict, 1, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Predict client movements")

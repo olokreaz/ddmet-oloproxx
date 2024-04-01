@@ -54,6 +54,10 @@
 #include "components/tooltips.h"
 #include "components/voting.h"
 
+// ox components
+#include "components/ox_chat.h"
+#include "components/ox_dummy_controls.h"
+
 class CGameInfo
 {
 public:
@@ -152,6 +156,10 @@ public:
 	CGhost m_Ghost;
 
 	CTooltips m_Tooltips;
+
+	// ox components
+	COxChat m_OxChat;
+	COxDummyControls m_OxDummyControls;
 
 private:
 	std::vector<class CComponent *> m_vpAll;
@@ -523,8 +531,6 @@ public:
 
 	int m_aLocalIds[NUM_DUMMIES];
 	CNetObj_PlayerInput m_DummyInput;
-	CNetObj_PlayerInput m_HammerInput;
-	unsigned int m_DummyFire;
 	bool m_ReceivedDDNetPlayer;
 
 	class CTeamsCore m_Teams;
