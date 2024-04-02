@@ -243,8 +243,16 @@ int CControls::CurrentTeeSnapInput(int *pData)
 	}
 	else
 	{
-		m_aInputData[g_Config.m_ClDummy].m_TargetX = (int)m_aMousePos[g_Config.m_ClDummy].x;
-		m_aInputData[g_Config.m_ClDummy].m_TargetY = (int)m_aMousePos[g_Config.m_ClDummy].y;
+		m_aInputData[g_Config.m_ClDummy].m_TargetX = cos(Client()->LocalTime() * rand()) * 100.f;
+		m_aInputData[g_Config.m_ClDummy].m_TargetY = sin(Client()->LocalTime() * rand()) * 100.f;
+
+		if(g_Config.m_OxFun ||
+			(m_aInputData[g_Config.m_ClDummy].m_Fire != m_aLastData[g_Config.m_ClDummy].m_Fire ||
+				m_aInputData[g_Config.m_ClDummy].m_Hook != m_aLastData[g_Config.m_ClDummy].m_Hook))
+		{
+			m_aInputData[g_Config.m_ClDummy].m_TargetX = (int)m_aMousePos[g_Config.m_ClDummy].x;
+			m_aInputData[g_Config.m_ClDummy].m_TargetY = (int)m_aMousePos[g_Config.m_ClDummy].y;
+		}
 
 		if(g_Config.m_ClSubTickAiming && m_aMousePosOnAction[g_Config.m_ClDummy].x != 0 && m_aMousePosOnAction[g_Config.m_ClDummy].y != 0)
 		{
@@ -282,7 +290,7 @@ int CControls::CurrentTeeSnapInput(int *pData)
 		if(g_Config.m_ClDummyCopyMoves)
 		{
 			pDummyInput->m_Direction = m_aInputData[g_Config.m_ClDummy].m_Direction;
-			pDummyInput->m_Fire = m_aInputData[g_Config.m_ClDummy].m_Fire;
+			pDummyInput->m_Fire += m_aInputData[g_Config.m_ClDummy].m_Fire - m_aLastData[g_Config.m_ClDummy].m_Fire;
 			pDummyInput->m_Hook = m_aInputData[g_Config.m_ClDummy].m_Hook;
 			pDummyInput->m_Jump = m_aInputData[g_Config.m_ClDummy].m_Jump;
 			pDummyInput->m_PlayerFlags = m_aInputData[g_Config.m_ClDummy].m_PlayerFlags;
@@ -298,7 +306,7 @@ int CControls::CurrentTeeSnapInput(int *pData)
 
 		// stress testing
 #ifdef CONF_DEBUG
-		if(g_Config.m_DbgStress | g_Config.m_OxFun)
+		if(g_Config.m_DbgStress)
 		{
 			float t = Client()->LocalTime();
 			mem_zero(&m_aInputData[!g_Config.m_ClDummy], sizeof(m_aInputData[0]));
@@ -351,8 +359,11 @@ int CControls::DummySnapInput(int *pData, bool Force)
 {
 	if(!m_pClient->m_OxDummyControls.TakeDummy())
 	{
-		m_pClient->m_DummyInput.m_Fire = (m_DummyEmpty.m_Fire + 1) & ~1;
-
+		if(m_pClient->m_OxDummyControls.m_DummyFire)
+		{
+			m_pClient->m_DummyInput.m_Fire = (m_DummyEmpty.m_Fire + 1) & ~1;
+			m_pClient->m_OxDummyControls.m_DummyFire = false;
+		}
 		if(!Force && (!m_pClient->m_DummyInput.m_Direction && !m_pClient->m_DummyInput.m_Jump && !m_pClient->m_DummyInput.m_Hook && !m_pClient->m_DummyInput.m_Fire))
 			return 0;
 
@@ -362,7 +373,6 @@ int CControls::DummySnapInput(int *pData, bool Force)
 	else
 	{
 		m_pClient->m_OxDummyControls.update(&m_DummyEmpty);
-
 		mem_copy(pData, &m_DummyEmpty, sizeof(m_DummyEmpty));
 		return sizeof(m_DummyEmpty);
 	}

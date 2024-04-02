@@ -21,6 +21,8 @@ class COxDummyControls : public CComponent
 	CControls *m_pControls;
 
 public:
+	bool m_DummyFire;
+
 	COxDummyControls();
 	void OnInit() override;
 	int Sizeof() const { return sizeof(*this); }

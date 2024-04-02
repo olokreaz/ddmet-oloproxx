@@ -23,6 +23,8 @@ COxDummyControls::COxDummyControls()
 	m_DummyJump = false;
 	m_DummyDirectionLeft = false;
 	m_DummyDirectionRight = false;
+
+	m_DummyFire = false;
 }
 
 void COxDummyControls::OnConsoleInit()
@@ -40,10 +42,11 @@ void COxDummyControls::OnInit()
 }
 void COxDummyControls::update(CNetObj_PlayerInput *pDummy)
 {
-	/*	dbg_msg("ox dummy controls f", "fly : %d hook : %d left/right : %d/%d jump : %d",
-			m_DummyFly, m_DummyHook, m_DummyDirectionLeft, m_DummyDirectionRight, m_DummyJump);*/
+	// mem_zero(pDummy, sizeof *pDummy);
 
-	mem_zero(pDummy, sizeof(*pDummy));
+	// pDummy->m_WantedWeapon = m_pClient->m_DummyInput.m_WantedWeapon;
+	// pDummy->m_TargetX = m_pClient->m_DummyInput.m_TargetX;
+	// pDummy->m_TargetY = m_pClient->m_DummyInput.m_TargetY;
 
 	if(m_DummyFly || (m_DummyHook && g_Config.m_OxDummyAutoAimHook))
 	{
@@ -56,19 +59,26 @@ void COxDummyControls::update(CNetObj_PlayerInput *pDummy)
 
 	if(m_DummyFly)
 	{
-		pDummy->m_Fire = (pDummy->m_Fire + 1) | 1;
-		pDummy->m_WantedWeapon = m_pClient->m_DummyInput.m_WantedWeapon = WEAPON_HAMMER + 1;
+		if(!m_DummyFire)
+		{
+			m_DummyFire = true;
+			pDummy->m_Fire = (pDummy->m_Fire + 1) | 1;
+			pDummy->m_WantedWeapon = m_pClient->m_DummyInput.m_WantedWeapon = WEAPON_HAMMER + 1;
+		}
 		return;
 	}
 
 	if(m_DummyHook)
 	{
 		pDummy->m_Hook = 1;
-		pDummy->m_WantedWeapon = m_pClient->m_DummyInput.m_WantedWeapon;
 	}
+	else
+		pDummy->m_Hook = 0;
 
 	if(m_DummyJump)
 		pDummy->m_Jump = 1;
+	else
+		pDummy->m_Jump = 0;
 
 	if(m_DummyDirectionLeft != m_DummyDirectionRight)
 	{
@@ -77,4 +87,6 @@ void COxDummyControls::update(CNetObj_PlayerInput *pDummy)
 		else if(m_DummyDirectionRight)
 			pDummy->m_Direction = 1;
 	}
+	else
+		pDummy->m_Direction = 0;
 }
