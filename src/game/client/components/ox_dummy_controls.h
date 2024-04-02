@@ -25,7 +25,7 @@ public:
 
 	COxDummyControls();
 	void OnInit() override;
-	int Sizeof() const { return sizeof(*this); }
+	int Sizeof() const override { return sizeof(*this); }
 	void OnConsoleInit() override;
 	void update(CNetObj_PlayerInput *pDummy);
 	bool TakeDummy() const { return m_DummyFly || m_DummyHook || m_DummyJump || m_DummyDirectionLeft || m_DummyDirectionRight; }

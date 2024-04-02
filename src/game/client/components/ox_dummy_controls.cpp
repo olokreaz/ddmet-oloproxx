@@ -40,13 +40,18 @@ void COxDummyControls::OnInit()
 {
 	m_pControls = &GameClient()->m_Controls;
 }
+
 void COxDummyControls::update(CNetObj_PlayerInput *pDummy)
 {
-	// mem_zero(pDummy, sizeof *pDummy);
+	pDummy->m_Fire = m_pClient->m_DummyInput.m_Fire;
 
-	// pDummy->m_WantedWeapon = m_pClient->m_DummyInput.m_WantedWeapon;
-	// pDummy->m_TargetX = m_pClient->m_DummyInput.m_TargetX;
-	// pDummy->m_TargetY = m_pClient->m_DummyInput.m_TargetY;
+	pDummy->m_WantedWeapon = m_pClient->m_DummyInput.m_WantedWeapon;
+	pDummy->m_TargetX = m_pClient->m_DummyInput.m_TargetX;
+	pDummy->m_TargetY = m_pClient->m_DummyInput.m_TargetY;
+
+	pDummy->m_Hook = 0;
+	pDummy->m_Direction = 0;
+	pDummy->m_Jump = 0;
 
 	if(m_DummyFly || (m_DummyHook && g_Config.m_OxDummyAutoAimHook))
 	{
@@ -71,15 +76,12 @@ void COxDummyControls::update(CNetObj_PlayerInput *pDummy)
 	if(m_DummyHook)
 	{
 		pDummy->m_Hook = 1;
+		return;
 	}
-	else
-		pDummy->m_Hook = 0;
 
-	if(m_DummyJump)
-		pDummy->m_Jump = 1;
-	else
-		pDummy->m_Jump = 0;
+	pDummy->m_Jump = m_DummyJump;
 
+	pDummy->m_Direction = 0;
 	if(m_DummyDirectionLeft != m_DummyDirectionRight)
 	{
 		if(m_DummyDirectionLeft)
@@ -87,6 +89,4 @@ void COxDummyControls::update(CNetObj_PlayerInput *pDummy)
 		else if(m_DummyDirectionRight)
 			pDummy->m_Direction = 1;
 	}
-	else
-		pDummy->m_Direction = 0;
 }

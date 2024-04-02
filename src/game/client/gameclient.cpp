@@ -433,6 +433,17 @@ int CGameClient::OnSnapInput(int *pData, bool Dummy, bool Force)
 	else
 		x = m_Controls.DummySnapInput(pData, Force);
 
+	auto *tee = (CNetObj_PlayerInput *)pData;
+
+	static int ddd = 0;
+	if(!(++ddd % 10))
+	{
+		if(Dummy)
+			dbg_msg("ox Dummy", "ClDummy[%d] -> Fire: %d", g_Config.m_ClDummy, tee->m_Fire);
+		else
+			dbg_msg("ox Tee", "ClDummy[%d] -> Fire: %d", g_Config.m_ClDummy, tee->m_Fire);
+	}
+
 	return x;
 }
 

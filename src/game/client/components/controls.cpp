@@ -243,16 +243,8 @@ int CControls::CurrentTeeSnapInput(int *pData)
 	}
 	else
 	{
-		m_aInputData[g_Config.m_ClDummy].m_TargetX = cos(Client()->LocalTime() * rand()) * 100.f;
-		m_aInputData[g_Config.m_ClDummy].m_TargetY = sin(Client()->LocalTime() * rand()) * 100.f;
-
-		if(g_Config.m_OxFun ||
-			(m_aInputData[g_Config.m_ClDummy].m_Fire != m_aLastData[g_Config.m_ClDummy].m_Fire ||
-				m_aInputData[g_Config.m_ClDummy].m_Hook != m_aLastData[g_Config.m_ClDummy].m_Hook))
-		{
-			m_aInputData[g_Config.m_ClDummy].m_TargetX = (int)m_aMousePos[g_Config.m_ClDummy].x;
-			m_aInputData[g_Config.m_ClDummy].m_TargetY = (int)m_aMousePos[g_Config.m_ClDummy].y;
-		}
+		m_aInputData[g_Config.m_ClDummy].m_TargetX = (int)m_aMousePos[g_Config.m_ClDummy].x;
+		m_aInputData[g_Config.m_ClDummy].m_TargetY = (int)m_aMousePos[g_Config.m_ClDummy].y;
 
 		if(g_Config.m_ClSubTickAiming && m_aMousePosOnAction[g_Config.m_ClDummy].x != 0 && m_aMousePosOnAction[g_Config.m_ClDummy].y != 0)
 		{
@@ -361,9 +353,10 @@ int CControls::DummySnapInput(int *pData, bool Force)
 	{
 		if(m_pClient->m_OxDummyControls.m_DummyFire)
 		{
-			m_pClient->m_DummyInput.m_Fire = (m_DummyEmpty.m_Fire + 1) & ~1;
+			m_pClient->m_DummyInput.m_Fire = (m_DummyEmpty.m_Fire + 1) & INPUT_STATE_MASK;
 			m_pClient->m_OxDummyControls.m_DummyFire = false;
 		}
+
 		if(!Force && (!m_pClient->m_DummyInput.m_Direction && !m_pClient->m_DummyInput.m_Jump && !m_pClient->m_DummyInput.m_Hook && !m_pClient->m_DummyInput.m_Fire))
 			return 0;
 
