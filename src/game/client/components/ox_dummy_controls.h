@@ -18,17 +18,24 @@ class COxDummyControls : public CComponent
 	bool m_DummyDirectionLeft;
 	bool m_DummyDirectionRight;
 
+	uint8_t m_DummyHookTick; // 3 ticks
+
 	CControls *m_pControls;
 
 public:
-	bool m_DummyFire;
+	int m_DummyFire;
 
 	COxDummyControls();
 	void OnInit() override;
 	int Sizeof() const override { return sizeof(*this); }
 	void OnConsoleInit() override;
-	void update(CNetObj_PlayerInput *pDummy);
-	bool TakeDummy() const { return m_DummyFly || m_DummyHook || m_DummyJump || m_DummyDirectionLeft || m_DummyDirectionRight; }
+	void update_dummy_controll(CNetObj_PlayerInput *pDummy);
+	void update_dummy_auto_shoot_unfreze();
+
+	bool TakeDummy() const
+	{
+		return m_DummyFly || m_DummyHook || m_DummyJump || m_DummyDirectionLeft || m_DummyDirectionRight;
+	}
 };
 
 #endif // GAME_CLIENT_COMPONENTS_OX_DUMMY_CONTROLS_H

@@ -412,13 +412,6 @@ void CGameClient::OnUpdate()
 
 void CGameClient::OnDummySwap()
 {
-	dbg_msg("ox swapper dummy",
-		"m_Controls.m_aInputData[(!g_Config.m_ClDummy) = %d] %d",
-		!g_Config.m_ClDummy, m_Controls.m_aInputData[!g_Config.m_ClDummy].m_Fire);
-	dbg_msg("ox swapper tee",
-		"m_Controls.m_aInputData[(g_Config.m_ClDummy) = %d] %d",
-		g_Config.m_ClDummy, m_Controls.m_aInputData[g_Config.m_ClDummy].m_Fire);
-
 	int tmp = m_DummyInput.m_Fire;
 	m_DummyInput = m_Controls.m_aInputData[!g_Config.m_ClDummy];
 	m_Controls.m_aInputData[g_Config.m_ClDummy].m_Fire = tmp;
@@ -434,15 +427,6 @@ int CGameClient::OnSnapInput(int *pData, bool Dummy, bool Force)
 		x = m_Controls.DummySnapInput(pData, Force);
 
 	auto *tee = (CNetObj_PlayerInput *)pData;
-
-	static int ddd = 0;
-	if(!(++ddd % 10))
-	{
-		if(Dummy)
-			dbg_msg("ox Dummy", "ClDummy[%d] -> Fire: %d", g_Config.m_ClDummy, tee->m_Fire);
-		else
-			dbg_msg("ox Tee", "ClDummy[%d] -> Fire: %d", g_Config.m_ClDummy, tee->m_Fire);
-	}
 
 	return x;
 }

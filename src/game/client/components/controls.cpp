@@ -186,6 +186,10 @@ void CControls::OnConsoleInit()
 		static CInputSet s_Set = {this, &m_aInputData[0].m_PrevWeapon, &m_aInputData[1].m_PrevWeapon, 0};
 		Console()->Register("+prevweapon", "", CFGFLAG_CLIENT, ConKeyInputNextPrevWeapon, (void *)&s_Set, "Switch to previous weapon");
 	}
+
+	{
+		// TODO: quik swap cs 'q' 1 2
+	}
 }
 
 void CControls::OnMessage(int Msg, void *pRawMsg)
@@ -351,21 +355,27 @@ int CControls::DummySnapInput(int *pData, bool Force)
 {
 	if(!m_pClient->m_OxDummyControls.TakeDummy())
 	{
-		if(m_pClient->m_OxDummyControls.m_DummyFire)
+		if(m_pClient->m_OxDummyControls.m_DummyFire != 0)
 		{
 			m_pClient->m_DummyInput.m_Fire = (m_DummyEmpty.m_Fire + 1) & INPUT_STATE_MASK;
-			m_pClient->m_OxDummyControls.m_DummyFire = false;
+			m_pClient->m_OxDummyControls.m_DummyFire = 0;
 		}
 
 		if(!Force && (!m_pClient->m_DummyInput.m_Direction && !m_pClient->m_DummyInput.m_Jump && !m_pClient->m_DummyInput.m_Hook && !m_pClient->m_DummyInput.m_Fire))
 			return 0;
+
+		if(g_Config.m_OxDummyAutoUnFreezeTee)
+		{
+			m_pClient->m_OxDummyControls.update_dummy_auto_shoot_unfreze();
+		}
 
 		mem_copy(pData, &m_pClient->m_DummyInput, sizeof(m_pClient->m_DummyInput));
 		return sizeof(m_pClient->m_DummyInput);
 	}
 	else
 	{
-		m_pClient->m_OxDummyControls.update(&m_DummyEmpty);
+		m_pClient->m_OxDummyControls.update_dummy_controll(&m_DummyEmpty);
+
 		mem_copy(pData, &m_DummyEmpty, sizeof(m_DummyEmpty));
 		return sizeof(m_DummyEmpty);
 	}

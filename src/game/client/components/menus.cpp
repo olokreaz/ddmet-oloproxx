@@ -800,7 +800,7 @@ void CMenus::RenderLoading(const char *pCaption, const char *pContent, int Incre
 	Graphics()->BlendNormal();
 
 	Graphics()->TextureClear();
-	Box.Draw(ColorRGBA{0, 0, 0, 0.50f}, IGraphics::CORNER_ALL, 15.0f);
+	Box.Draw(ColorRGBA{0, 0, 0, 0.50f}, IGraphics::CORNER_ALL, 90.0f);
 
 	CUIRect Part;
 	Box.HSplitTop(20.f, nullptr, &Box);

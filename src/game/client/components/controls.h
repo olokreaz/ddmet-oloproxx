@@ -30,6 +30,7 @@ public:
 	int m_aInputDirectionLeft[NUM_DUMMIES];
 	int m_aInputDirectionRight[NUM_DUMMIES];
 	int m_aShowHookColl[NUM_DUMMIES];
+	int m_aQLastWeapon[NUM_DUMMIES];
 	int m_LastDummy;
 	int m_OtherFire;
 

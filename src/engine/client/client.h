@@ -80,6 +80,7 @@ class CClient : public IClient, public CDemoPlayer::IListener
 	CHttp m_Http;
 
 	CNetClient m_aNetClient[NUM_CONNS];
+
 	CDemoPlayer m_DemoPlayer;
 	CDemoRecorder m_aDemoRecorder[RECORDER_MAX];
 	CDemoEditor m_DemoEditor;

@@ -36,9 +36,9 @@ void HandleSigIntTerm(int Param)
 {
 	InterruptSignaled = 1;
 
-	// Exit the next time a signal is received
-	signal(SIGINT, SIG_DFL);
-	signal(SIGTERM, SIG_DFL);
+        // Exit the next time a signal is received
+        signal(SIGINT, SIG_DFL);
+        signal(SIGTERM, SIG_DFL);
 }
 
 int main(int argc, const char **argv)

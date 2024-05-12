@@ -1,53 +1,85 @@
 ---
 Language: Cpp
+BasedOnStyle: LLVM
 AccessModifierOffset: -8
-AlignAfterOpenBracket: DontAlign
-AlignEscapedNewlines: DontAlign
-AlignTrailingComments: false
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossComments: true
+  AcrossEmptyLines: true
+  AlignCompound: true
+  PadOperators: true
+AlignConsecutiveDeclarations: true
+AlignOperands: true
+AlignTrailingComments: true
+AllowAllArgumentsOnNextLine: false
+AllowAllConstructorInitializersOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Always
 AllowShortCaseLabelsOnASingleLine: true
-AllowShortFunctionsOnASingleLine: All
-AlwaysBreakTemplateDeclarations: true
-BasedOnStyle: LLVM
-BreakBeforeBraces: Custom
-BreakBeforeTernaryOperators: false
-BreakConstructorInitializers: AfterColon
-BreakStringLiterals: true
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakAfterDefinitionReturnType: All
+AlwaysBreakTemplateDeclarations: No
+BinPackArguments: false
+BinPackParameters: false
 BraceWrapping:
-  AfterCaseLabel: true
-  AfterClass: true
-  AfterControlStatement: true
+  AfterCaseLabel: false
+  AfterClass: false
+  AfterControlStatement: false
   AfterEnum: true
-  AfterExternBlock: false
   AfterFunction: true
   AfterNamespace: false
   AfterStruct: true
   AfterUnion: true
-  BeforeCatch: true
-  BeforeElse: true
-  IndentBraces: false
-  SplitEmptyNamespace: true
-  SplitEmptyRecord: true
-#ColumnLimit: 100
-ColumnLimit: 0
-CommentPragmas: ''
+  AfterExternBlock: false
+  BeforeCatch: false
+  BeforeElse: false
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+BreakBeforeBraces: Custom
+BreakConstructorInitializersBeforeComma: false
+BreakInheritanceList: AfterColon
+ColumnLimit: 180
+CompactNamespaces: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ConstructorInitializerIndentWidth: 8
-ContinuationIndentWidth: 8
+ContinuationIndentWidth: 16
 IncludeCategories:
-  - Regex:           '^"'
-    Priority:        1
-  - Regex:           '^<(engine|game|mastersrv|versionsrv>'
-    Priority:        2
-  - Regex:           '.*'
-    Priority:        3
-IncludeIsMainRegex: '$'
+  - Regex: '^<engine/(client|server)/.*'
+    Priority: 1
+  - Regex: '^<engine/.*'
+    Priority: 2
+  - Regex: '^<game/(client|server)/.*'
+    Priority: 3
+  - Regex: '^<game/.*'
+    Priority: 4
+  - Regex: '^<.*/.*'
+    Priority: 5
+  - Regex: '^<.*'
+    Priority: 6
+  - Regex: '^".*'
+    Priority: 7
+  - Regex: '.*'
+    Priority: 7
+IncludeIsMainRegex: '([-_](test|unittest))?$'
+IndentCaseLabels: true
+IndentPPDirectives: AfterHash
 IndentWidth: 8
-KeepEmptyLinesAtTheStartOfBlocks: false
-PointerAlignment: Right
-ReflowComments: true
-SpaceBeforeParens: Never
+InsertNewlineAtEOF: true
+NamespaceIndentation: All
+PointerAlignment: Left
+ReflowComments: false
 SpaceAfterTemplateKeyword: false
-TabWidth: 8
-UseTab: ForContinuationAndIndentation
+SpaceInEmptyParentheses: true
+SpacesInAngles: true
+SpacesInConditionalStatement: true
+SpacesInCStyleCastParentheses: true
+SpacesInParentheses: true
+SpacesInSquareBrackets: true
+UseTab: Always
+CommentPragmas: '^<-.*$'
+SortIncludes: CaseSensitive
+IncludeBlocks: Preserve
 ...
