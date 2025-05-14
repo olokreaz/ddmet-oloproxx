@@ -12,44 +12,44 @@
 
 class CControls : public CComponent
 {
-	float GetMaxMouseDistance() const;
+	float GetMaxMouseDistance( ) const;
 
 	CNetObj_PlayerInput m_DummyEmpty;
 
 public:
-	vec2 m_aMousePos[NUM_DUMMIES];
-	vec2 m_aMousePosOnAction[NUM_DUMMIES];
-	vec2 m_aTargetPos[NUM_DUMMIES];
+	vec2  m_aMousePos[ NUM_DUMMIES ];
+	vec2  m_aMousePosOnAction[ NUM_DUMMIES ];
+	vec2  m_aTargetPos[ NUM_DUMMIES ];
 	float m_OldMouseX;
 	float m_OldMouseY;
 
-	int m_aAmmoCount[NUM_WEAPONS];
+	int m_aAmmoCount[ NUM_WEAPONS ];
 
-	CNetObj_PlayerInput m_aInputData[NUM_DUMMIES];
-	CNetObj_PlayerInput m_aLastData[NUM_DUMMIES];
-	int m_aInputDirectionLeft[NUM_DUMMIES];
-	int m_aInputDirectionRight[NUM_DUMMIES];
-	int m_aShowHookColl[NUM_DUMMIES];
-	int m_aQLastWeapon[NUM_DUMMIES];
-	int m_LastDummy;
-	int m_OtherFire;
+	CNetObj_PlayerInput m_aInputData[ NUM_DUMMIES ];
+	CNetObj_PlayerInput m_aLastData[ NUM_DUMMIES ];
+	int		    m_aInputDirectionLeft[ NUM_DUMMIES ];
+	int		    m_aInputDirectionRight[ NUM_DUMMIES ];
+	int		    m_aShowHookColl[ NUM_DUMMIES ];
+	int		    m_aQLastWeapon[ NUM_DUMMIES ];
+	int		    m_LastDummy;
+	int		    m_OtherFire;
 
-	CControls();
-	virtual int Sizeof() const override { return sizeof(*this); }
+	CControls( );
+	int Sizeof( ) const override { return sizeof( *this ); }
 
-	virtual void OnReset() override;
-	virtual void OnRelease() override;
-	virtual void OnRender() override;
-	virtual void OnMessage(int MsgType, void *pRawMsg) override;
-	virtual bool OnCursorMove(float x, float y, IInput::ECursorType CursorType) override;
-	virtual void OnConsoleInit() override;
-	virtual void OnPlayerDeath();
+	void OnReset( ) override;
+	void OnRelease( ) override;
+	void OnRender( ) override;
+	void OnMessage( int MsgType, void *pRawMsg ) override;
+	bool OnCursorMove( float x, float y, IInput::ECursorType CursorType ) override;
+	void OnConsoleInit( ) override;
+	void OnPlayerDeath( );
 
-	int CurrentTeeSnapInput(int *pData);
+	int CurrentTeeSnapInput( int *pData );
 
-	int DummySnapInput(int *pData, bool Force);
+	int DummySnapInput( int *pData, bool Force );
 
-	void ClampMousePos();
-	void ResetInput(int Dummy);
+	void ClampMousePos( );
+	void ResetInput( int Dummy );
 };
 #endif

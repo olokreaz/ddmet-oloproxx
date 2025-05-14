@@ -11,7 +11,9 @@ file(STRINGS src/game/version.h VERSION_LINE
 )
 
 # Установка флага /FORCE:MULTIPLE для всех целей (exe, dll, etc.)
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /FORCE:MULTIPLE")
+# set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /FORCE:MULTIPLE")
+
+add_link_options(/FORCE)
 
 if (VERSION_LINE MATCHES "\"([0-9]+)\\.([0-9]+)\\.([0-9]+)\"")
     set(VERSION_MAJOR ${CMAKE_MATCH_1})
@@ -759,7 +761,7 @@ endif ()
 ########################################################################
 # DOWNLOAD GTEST
 ########################################################################
-
+set(DOWNLOAD_GTEST OFF)
 if (NOT (GTEST_FOUND) AND DOWNLOAD_GTEST)
     set(DDNET_GTEST_VERSION v1.13.0)
     configure_file(cmake/Download_GTest_CMakeLists.txt.in googletest-download/CMakeLists.txt)

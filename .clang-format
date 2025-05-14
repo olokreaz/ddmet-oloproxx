@@ -2,84 +2,140 @@
 Language: Cpp
 BasedOnStyle: LLVM
 AccessModifierOffset: -8
-AlignConsecutiveAssignments:
-  Enabled: true
-  AcrossComments: true
-  AcrossEmptyLines: true
-  AlignCompound: true
-  PadOperators: true
+AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true
-AlignOperands: true
-AlignTrailingComments: true
-AllowAllArgumentsOnNextLine: false
-AllowAllConstructorInitializersOnNextLine: false
-AllowAllParametersOfDeclarationOnNextLine: false
+AlignOperands: Align
+AlignTrailingComments:
+        Kind: Always
+        OverEmptyLines: 8
+RemoveBracesLLVM: true
+IndentWrappedFunctionNames: false
+AllowShortFunctionsOnASingleLine: All
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: Always
 AllowShortCaseLabelsOnASingleLine: true
 AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 AllowShortLoopsOnASingleLine: true
 AlwaysBreakAfterDefinitionReturnType: All
 AlwaysBreakTemplateDeclarations: No
-BinPackArguments: false
-BinPackParameters: false
-BraceWrapping:
-  AfterCaseLabel: false
-  AfterClass: false
-  AfterControlStatement: false
-  AfterEnum: true
-  AfterFunction: true
-  AfterNamespace: false
-  AfterStruct: true
-  AfterUnion: true
-  AfterExternBlock: false
-  BeforeCatch: false
-  BeforeElse: false
-  BeforeLambdaBody: false
-  BeforeWhile: false
-  SplitEmptyFunction: false
-  SplitEmptyRecord: false
-  SplitEmptyNamespace: false
+BinPackArguments: true
+BinPackParameters: OnePerLine
 BreakBeforeBraces: Custom
-BreakConstructorInitializersBeforeComma: false
-BreakInheritanceList: AfterColon
-ColumnLimit: 180
+BraceWrapping:
+        AfterCaseLabel: false
+        AfterClass: true
+        AfterControlStatement: true
+        AfterEnum: true
+        AfterFunction: true
+        AfterNamespace: true
+        AfterStruct: true
+        AfterUnion: true
+        AfterExternBlock: true
+        BeforeCatch: true
+        BeforeElse: true
+        BeforeLambdaBody: false
+        BeforeWhile: true
+        SplitEmptyFunction: false
+        AfterObjCDeclaration: false
+        IndentBraces: false
+        SplitEmptyRecord: false
+        SplitEmptyNamespace: false
+BreakInheritanceList: AfterComma
+AlignConsecutiveShortCaseStatements:
+        Enabled: true
+        AcrossComments: true
+        AcrossEmptyLines: true
+        AlignCaseColons: false
+AlignAfterOpenBracket: Align
+AlignArrayOfStructures: Left
+AlignConsecutiveBitFields:
+        AcrossComments: true
+        AcrossEmptyLines: true
+        AlignCompound: true
+        AlignFunctionPointers: true
+        Enabled: true
+        PadOperators: true
+AlignConsecutiveMacros: true
+#AlignConsecutiveTableGenBreakingDAGArgColons: true
+#AlignConsecutiveTableGenCondOperatorColons: true
+#AlignConsecutiveTableGenDefinitionColons: true
+AlignEscapedNewlines: Right
+AllowBreakBeforeNoexceptSpecifier: Always
+#AllowShortCaseExpressionOnASingleLine: true
+#AllowShortCompoundRequirementOnASingleLine: true
+AllowShortEnumsOnASingleLine: true
+AllowShortLambdasOnASingleLine: All
+AlwaysBreakBeforeMultilineStrings: false
+BitFieldColonSpacing: Both
+BracedInitializerIndentWidth: 8
+#BreakAdjacentStringLiterals: true
+BreakAfterAttributes: Never
+BreakAfterJavaFieldAnnotations: true
+#BreakAfterReturnType: Automatic
+BreakArrays: false
+BreakBeforeBinaryOperators: All
+BreakBeforeConceptDeclarations: Never
+BreakBeforeInlineASMColon: OnlyMultiline
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: AfterColon
+#BreakFunctionDefinitionParameters: false
+BreakStringLiterals: true
+#BreakTemplateDeclarations: No
+ConstructorInitializerIndentWidth: 8
+Cpp11BracedListStyle: true
+DerivePointerAlignment: true
+ExperimentalAutoDetectBinPacking: true
+FixNamespaceComments: true
+Standard: Latest
+TabWidth: 8
+SpacesBeforeTrailingComments: 4
+InsertBraces: false
+
+ColumnLimit: 250
 CompactNamespaces: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ContinuationIndentWidth: 16
-IncludeCategories:
-  - Regex: '^<engine/(client|server)/.*'
-    Priority: 1
-  - Regex: '^<engine/.*'
-    Priority: 2
-  - Regex: '^<game/(client|server)/.*'
-    Priority: 3
-  - Regex: '^<game/.*'
-    Priority: 4
-  - Regex: '^<.*/.*'
-    Priority: 5
-  - Regex: '^<.*'
-    Priority: 6
-  - Regex: '^".*'
-    Priority: 7
-  - Regex: '.*'
-    Priority: 7
+#IncludeCategories:
+#        -       Regex: '^".*'
+#                Priority: 0
+#        -       Regex: '^<tier[0-3]/.*'
+#                Priority: 1
+#        -       Regex: '^<boost/.*'
+#                Priority: 5
+#        -       Regex: '^<.*/.*'
+#                Priority: 5
+#        -       Regex: '^<.*\.(h|hpp)'
+#                Priority: 6
+#        -       Regex: '^<.*'
+#                Priority: 7
+#        -       Regex: '.*'
+#                Priority: 9
+#        -       Regex: '.*dbg\.hpp$'
+#                Priority: 10
 IncludeIsMainRegex: '([-_](test|unittest))?$'
 IndentCaseLabels: true
-IndentPPDirectives: AfterHash
+IndentPPDirectives: BeforeHash
 IndentWidth: 8
 InsertNewlineAtEOF: true
+MacroBlockBegin: '^REGIONB$'
+MacroBlockEnd: '^REGIONE$'
 NamespaceIndentation: All
 PointerAlignment: Left
 ReflowComments: false
 SpaceAfterTemplateKeyword: false
 SpaceInEmptyParentheses: true
-SpacesInAngles: true
+SpacesInAngles: Always
 SpacesInConditionalStatement: true
 SpacesInCStyleCastParentheses: true
 SpacesInParentheses: true
 SpacesInSquareBrackets: true
 UseTab: Always
 CommentPragmas: '^<-.*$'
-SortIncludes: CaseSensitive
-IncludeBlocks: Preserve
+#SortIncludes: CaseSensitive
+#IncludeBlocks: Regroup
+BreakAfterReturnType: Automatic
+
+
 ...

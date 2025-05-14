@@ -28,6 +28,8 @@ MACRO_CONFIG_INT(OxDummyFlyDist, ox_dummy_fly_distance, 0, 0, 1, CFGFLAG_CLIENT 
 
 MACRO_CONFIG_INT(OxDummyAutoUnFreezeTee, ox_dummy_auto_unfreezeTee, 0, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "dummy auto shoot to u for unfreeze")
 
+MACRO_CONFIG_INT(OxDummyZombi, ox_dummy_zombi, 0, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "dummy zombi")
+
 // KOG
 MACRO_CONFIG_INT(OxSendBackMsg, ox_send_back_msg, 1, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Send back message to the ur mates")
 MACRO_CONFIG_INT(OxSendBackInTeam, ox_send_back_in_team, 1, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Send back message only to the team")
